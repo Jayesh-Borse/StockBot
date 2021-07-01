@@ -20,7 +20,7 @@ const client = new Discord.Client();
 const { json } = require('express');
 const cheerio = require('cheerio');
 
-function companyEODOverview(url){
+function companyEODOverview(url, message){
     axios({
         method : 'get',
         url: url,
@@ -156,11 +156,7 @@ client.on('message', (message) => {
     //marketEODOverview();
     var greet = ["Hello","hello","Hii","Hi","hi","hii","Hey","hey","Hi there","Hello there","hello there","heyy","Heyy","helloooooo","hellooo", "hey there","stock bot", "StockBot", "stockbot", "Stock Bot", "🤖"]
     const userMsg = message.content;
-    if(greet.includes(userMsg) === true){
-        console.log(message.content);
-        helpMenu(message);
-    }
-    else if(!message.author.bot){
+    if(!message.author.bot){
         var msg = message.content.split(' ');
         console.log(msg)
         var datetime = new Date();
@@ -169,45 +165,21 @@ client.on('message', (message) => {
         var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ msg[1] +'&apikey='+process.env.API_KEY
         var overviewUrl = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol='+ msg[1] +'&apikey='+process.env.API_KEY
         var newsUrl = 'https://finnhub.io/api/v1/company-news?symbol='+msg[1]+'&from='+todaysDate+'&to='+todaysDate+'&token='+process.env.FINHUB_API_KEY
-        if(msg.length > 1 &&  msg[0] === '$price'){
-            axios({
-                method : 'get',
-                url: url,
-                responseType: json,
-                //headers: {'User-Agent': 'request'}
-              })
-               .then((res) => {
-                  var date = res.data['Meta Data']['3. Last Refreshed'];
-                  var company = msg[1];
-                  const botMessage = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(company)
-                    .setDescription('Last Refreshed : ' + date)
-                    .addFields(
-                        { name: 'Open', value: res.data['Time Series (Daily)'][date]['1. open'], inline: true},
-                        { name: 'Close', value: res.data['Time Series (Daily)'][date]['4. close'], inline: true },
-                        { name: '\u200B', value: '\u200B', inline: true },
-                        { name: 'High', value: res.data['Time Series (Daily)'][date]['2. high'], inline: true },
-                        { name: 'Low', value: res.data['Time Series (Daily)'][date]['3. low'], inline: true },
-                        { name: '\u200B', value: '\u200B', inline: true },
-                        { name: 'Volume', value: res.data['Time Series (Daily)'][date]['5. volume']},
-                    )
-                    .setTimestamp()
-                  message.reply(botMessage);
-            });
+        if(greet.includes(userMsg) === true){
+            console.log(message.content);
+            helpMenu(message);
+            console.log("hii");
         }
-
-        if(msg.length > 1 &&  msg[0] === '$overview')
-        {
+        else if(msg.length > 1 &&  msg[0] === '$price'){
+            companyEODOverview(url, message);
+        }
+        else if(msg.length > 1 &&  msg[0] === '$overview'){
             CompanyOverview(overviewUrl,msg[1],message)
-
         }
-        if(msg.length > 1 &&  msg[0] === '$news')
-        {
+        else if(msg.length > 1 &&  msg[0] === '$news'){
             CompanyNews(newsUrl,msg[1],message)
-
         }
-         else{
+        else{
             message.reply("`Provide Valid Company Symbol`");
         }
     }
