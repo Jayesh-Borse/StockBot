@@ -24,6 +24,68 @@ client.on("ready", () => {
     console.log(`${client.user.tag} is ready !`);
 });
 
+function CompanyNews(newsUrl,symb,message){
+    return axios({
+        method : 'get',
+        url: newsUrl,
+        responseType: json,
+        
+      })
+       .then((res) => {
+        
+          var company = symb;
+          
+          const botMessage = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(` Today's ${company} News`)
+            .setTimestamp()
+            res.data.forEach((entry) => {
+                botMessage.addFields(
+                    {name: entry['headline'],value: entry['summary'] != "" ?entry['summary']+'\n'+entry['url']:entry['url']},
+                    
+                    ).setImage(entry['image']);
+                        // .addField('Summary',entry['summary'])
+                        
+                console.log(entry['summary'])
+              });
+            
+            message.reply(botMessage);
+    });
+}
+
+function CompanyOverview(overviewUrl,symb,message){
+    return axios({
+        method : 'get',
+        url: overviewUrl,
+        responseType: json,
+        
+      })
+       .then((res) => {
+        
+          var company = symb;
+          
+          const botMessage = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(company + ' Overview')
+            .addFields(
+                { name: 'Asset Type', value: res.data['AssetType'], inline: true},
+                { name: '\u200B', value: '\u200B',inline:true},
+                { name: 'Name', value: res.data['Name'], inline: true},
+                
+                { name: 'Currency', value: res.data['Currency'], inline: true},
+                { name: 'PE Ratio', value: res.data['PERatio'], inline: true},
+                { name: 'PEG Ratio', value: res.data['PEGRatio'], inline: true},
+                
+                { name: '52 Week High', value: res.data['52WeekHigh'], inline: true},
+                { name: '52 Week Low', value: res.data['52WeekLow'], inline: true},
+                { name: 'Dividend Yeild', value: res.data['DividendYield'], inline: true},
+
+            )
+            .setTimestamp()
+            message.reply(botMessage);
+    });
+}
+
 client.on('message', (message) => {
     console.log(message.author.tag);
     if(message.content === 'Hello'){
@@ -32,7 +94,12 @@ client.on('message', (message) => {
     if(!message.author.bot){
         var msg = message.content.split(' ');
         console.log(msg)
+        var datetime = new Date();
+        var todaysDate = datetime.toISOString().slice(0,10)
+        console.log(datetime.toISOString().slice(0,10));
         var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ msg[1] +'&apikey='+process.env.API_KEY
+        var overviewUrl = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol='+ msg[1] +'&apikey='+process.env.API_KEY
+        var newsUrl = 'https://finnhub.io/api/v1/company-news?symbol='+msg[1]+'&from='+todaysDate+'&to='+todaysDate+'&token='+process.env.FINHUB_API_KEY
         if(msg.length > 1 &&  msg[0] === '$price'){
             axios({
                 method : 'get',
@@ -59,7 +126,19 @@ client.on('message', (message) => {
                     .setTimestamp()
                   message.reply(botMessage);
             });
-        }else{
+        }
+       
+        if(msg.length > 1 &&  msg[0] === '$overview')
+        {
+            CompanyOverview(overviewUrl,msg[1],message)
+            
+        }
+        if(msg.length > 1 &&  msg[0] === '$news')
+        {
+            CompanyNews(newsUrl,msg[1],message)
+            
+        }
+         else{
             message.reply("`Provide Valid Company Symbol`");
         }
         
