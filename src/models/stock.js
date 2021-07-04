@@ -1,10 +1,12 @@
 const axios = require('axios')
 const Discord = require('discord.js');
 const { json } = require('express');
+const PythonShell = require('python-shell').PythonShell;
 
 class StockMarket {
     helpMenu = helpMenu
     stockCommands=stockCommands
+    marketEODOverview=marketEODOverview
 }
 
 function stockCommands(message, msg){
@@ -21,11 +23,14 @@ function stockCommands(message, msg){
     if(msg.length > 1 &&  msg[0] === '$price'){
         companyEODOverview(url, message, msg)
     }
-    else if(msg.length > 1 &&  msg[0] === '$overview'){
+    else if(msg.length > 1 &&  msg[0] === '$companyOverview'){
         CompanyOverview(overviewUrl,msg[1],message)
     }
     else if(msg.length > 1 &&  msg[0] === '$news'){
         CompanyNews(newsUrl,msg[1],message)
+    }
+    else if(msg[0] === '$marketOverview'){
+        marketEODOverview(message)
     }
 }
 
@@ -44,20 +49,13 @@ function helpMenu (message) {
     message.reply(helpMessage);
 }
 
-function marketEODOverview(){
-    var url = 'https://www.moneycontrol.com/mc/widget/marketaction/getTopGainerLoserData?show=dashboard&classic=true'
-    //const $ = cheerio.load(data);
-    axios({
-        method : 'get',
-        url: url,
-        responseType: json,
-        //headers: {'User-Agent': 'request'}
-      })
-       .then((res) =>{
-           //console.log(res['data'])
-           const $ = cheerio.load(res['data'])
-           console.log($['_root']['children'][1]['children'][1]['children'][0]['children'][0]['parent']['children'][1])
-       })
+function marketEODOverview(message){
+    PythonShell.run('./src/models/script1.py', null, function (err, result) {
+        if (err) throw err;
+        else{
+            console.log(result);
+        }
+    });
 }
 
 
@@ -66,7 +64,6 @@ function companyEODOverview(url, message, msg){
         method : 'get',
         url: url,
         responseType: json,
-        //headers: {'User-Agent': 'request'}
       })
        .then((res) => {
           var date = res.data['Meta Data']['3. Last Refreshed'];
@@ -105,7 +102,6 @@ function CompanyNews(newsUrl,symb,message){
                 botMessage.addFields(
                     {name: entry['headline'],value: entry['summary'] != "" ?entry['summary']+'\n'+entry['url']:entry['url']},
                     ).setImage(entry['image']);
-                        // .addField('Summary',entry['summary'])
                 console.log(entry['summary'])
               });
             message.reply(botMessage);
