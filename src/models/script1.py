@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import urllib.request,urllib.parse,urllib.error
-
+import json
 
 
 url = 'https://www.moneycontrol.com/mc/widget/marketaction/getTopGainerLoserData?show=dashboard&classic=true'
@@ -53,4 +53,5 @@ for loser in sensexLosers:
     dict = {"companyName" : company, "closingPrice" : price, "percentDown" : percentDown}
     marketDict['Sensex']['Losers'].append(dict)
 
-print(marketDict)
+print(json.dumps(marketDict))
+# print(marketData)

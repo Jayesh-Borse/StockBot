@@ -2,6 +2,13 @@ const axios = require('axios')
 const Discord = require('discord.js');
 const { json } = require('express');
 const PythonShell = require('python-shell').PythonShell;
+var options = {
+    mode: 'json',
+    pythonOptions: ['-u'], // get print results in real-time
+    scriptPath: './src/models/',
+  }
+
+
 
 class StockMarket {
     helpMenu = helpMenu
@@ -50,10 +57,37 @@ function helpMenu (message) {
 }
 
 function marketEODOverview(message){
-    PythonShell.run('./src/models/script1.py', null, function (err, result) {
+    PythonShell.run('script1.py', options, function (err, result) {
         if (err) throw err;
         else{
-            console.log(result);
+            console.log(result[0]['Nifty']);
+            const botMessage = new Discord.MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle(` Today's Market Overview`)
+                .setTimestamp()
+                .setDescription('`Nifty Gainers-Losers`')
+                for(let i=0; i<3; i++){
+                    botMessage.addFields(
+                            {name: result[0]['Nifty']['Gainers'][i]["companyName"],value: "Closing Price - "+result[0]['Nifty']['Gainers'][i]["closingPrice"] + "\nUp " + result[0]['Nifty']['Gainers'][i]["percentUp"], inline:true},
+                            { name: '\u200B', value: '\u200B', inline: true},
+                            {name: result[0]['Nifty']['Losers'][i]["companyName"],value: "Closing Price - "+result[0]['Nifty']['Losers'][i]["closingPrice"] + "\nDown " + result[0]['Nifty']['Losers'][i]["percentDown"], inline:true},
+                        )
+                };
+                message.reply(botMessage);
+
+                const botMessage1 = new Discord.MessageEmbed()
+                .setColor('#0099ff')
+                .setTimestamp()
+                .setDescription('`Sensex Gainers-Losers`')
+                for(let i=0; i<3; i++){
+                    botMessage1.addFields(
+                            {name: result[0]['Sensex']['Gainers'][i]["companyName"],value: "Closing Price - "+result[0]['Sensex']['Gainers'][i]["closingPrice"] + "\nUp " + result[0]['Sensex']['Gainers'][i]["percentUp"], inline:true},
+                            { name: '\u200B', value: '\u200B', inline: true},
+                            {name: result[0]['Sensex']['Losers'][i]["companyName"],value: "Closing Price - "+result[0]['Sensex']['Losers'][i]["closingPrice"] + "\nDown " + result[0]['Sensex']['Losers'][i]["percentDown"], inline:true},
+                        )
+                };
+                message.reply(botMessage1);
+                
         }
     });
 }
