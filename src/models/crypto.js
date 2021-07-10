@@ -1,6 +1,9 @@
 const axios = require('axios')
 const Discord = require('discord.js');
 const { json } = require('express');
+const CryptoChart = require('./cryptoChart.js')
+
+const cryptoChart = new CryptoChart();
 
 class CryptoMarket{
     CryptoCommands=CryptoCommands
@@ -16,6 +19,9 @@ function CryptoCommands(message){
     }
     else if(msg.length == 2 && msg[0] === '!price'){
         DailyPrice(msg[1],message);
+    }
+    else if(msg.length == 3 && msg[0] === '!chart'){
+        cryptoChart.chartHandler(message,msg);
     }
     else{
         message.reply("`Provide Valid Company Symbol`");
