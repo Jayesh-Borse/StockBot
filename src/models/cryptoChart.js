@@ -34,7 +34,6 @@ async function getMonthlyData(companySymbol) {
         responseType: json,
       })
        .then((res) => {
-            console.log(res);
             var dailyData = res['data']['Time Series (Digital Currency Daily)']
             var i = 30;
             for (let key of Object.keys(dailyData)) {
@@ -126,7 +125,6 @@ async function getDailyData(companySymbol) {
         responseType: json,
       })
        .then((res) => {
-            //console.log(res);
             var dailyData = res['data']['Time Series Crypto (5min)']
             var i = 1;
             for (let key of Object.keys(dailyData)) {
