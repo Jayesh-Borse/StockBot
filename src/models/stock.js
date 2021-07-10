@@ -1,6 +1,7 @@
 const axios = require('axios')
 const Discord = require('discord.js');
 const { json } = require('express');
+const StockChart = require('./stockCharts.js')
 const PythonShell = require('python-shell').PythonShell;
 var options = {
     mode: 'json',
@@ -8,7 +9,7 @@ var options = {
     scriptPath: './src/models/',
   }
 
-
+const stockchart = new StockChart();
 
 class StockMarket {
     helpMenu = helpMenu
@@ -38,6 +39,9 @@ function stockCommands(message, msg){
     }
     else if(msg[0] === '$marketOverview'){
         marketEODOverview(message)
+    }
+    else if(msg.length > 2 && msg[0] === '$chart'){
+        stockchart.chartHandler(message, msg)
     }
 }
 
