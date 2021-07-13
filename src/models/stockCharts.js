@@ -122,7 +122,7 @@ async function comparecompany(message,firstCompanySym,secondCompanySym){
     .setHeight(600)
 
     const chartMessage = new Discord.MessageEmbed()
-        .setColor('#00FF00')
+        .setColor('#0099FF')
         .setTitle("Comparison between "+ firstCompanySym + " and " + secondCompanySym)
         .setImage(myChart.getUrl())
         .setTimestamp()
