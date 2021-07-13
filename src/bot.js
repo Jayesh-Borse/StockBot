@@ -40,7 +40,41 @@ client.on('message', (message) => {
     }
     if(!message.author.bot){
         var msg = message.content.split(' ');
-        if(msg[0].charAt(0)==='!'){
+        if(msg[0]==='$help')
+        {
+            const helpMessage = new Discord.MessageEmbed()
+            .setColor('#00FF00')
+            .setTitle('Stock Market Commands')
+            .setThumbnail('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWtRb8O3CD3WRfd6MaEEZASSOlj1FKHcUGFsfV9HXU459LT1n8tDPeAj9Wj_SLyBK7pm4&usqp=CAU')
+            .addFields(
+                { name: '\n\nPrice', value: '`eg.$price AAPL`' , inline: true},
+                { name: '\u200B', value: '\u200B', inline: true },
+                { name: '\n\nOverview', value: '`eg.$overview AAPL`', inline: true},
+                { name: '\n\nChart (Month-M, Day-D)', value: '`eg.$chart AAPL D`', inline: true},
+                { name: '\u200B', value: '\u200B', inline: true },
+                { name: '\n\nCompare 2 stocks', value: '`eg.$chart compare AAPL TSLA`',inline:true},
+                { name: '\n\nLatest news', value: '`eg.$news AAPL`',inline:true},
+                { name: '\u200B', value: '\u200B', inline: true },
+                { name: '\n\nEnd of the day overview', value: '`eg.$marketOverview`',inline:true},
+            )
+            .setTimestamp()
+            message.reply(helpMessage);
+        }
+        else if(msg[0]==='!help')
+        {
+            const helpMessage = new Discord.MessageEmbed()
+            .setColor('#00FF00')
+            .setTitle('Crypto Commands')
+            .setThumbnail('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWtRb8O3CD3WRfd6MaEEZASSOlj1FKHcUGFsfV9HXU459LT1n8tDPeAj9Wj_SLyBK7pm4&usqp=CAU')
+            .addFields(
+                { name: '\n\nPrice', value: '`eg.!price BTC`' },
+                { name: '\n\nExchangeRate', value: '`eg.!exchangeRate BTC ETH`'},
+                { name: '\n\nChart (Month-M, Day-D)', value: '`eg.!chart BTC M`'},
+            )
+            .setTimestamp()
+            message.reply(helpMessage);
+        }
+        else if(msg[0].charAt(0)==='!'){
             cryptoMarket.CryptoCommands(message);
         }
         else if(msg[0].charAt(0)==='$'){

@@ -31,7 +31,7 @@ function stockCommands(message, msg){
     if(msg.length > 1 &&  msg[0] === '$price'){
         companyEODOverview(url, message, msg)
     }
-    else if(msg.length > 1 &&  msg[0] === '$companyOverview'){
+    else if(msg.length > 1 &&  msg[0] === '$overview'){
         CompanyOverview(overviewUrl,msg[1],message)
     }
     else if(msg.length > 1 &&  msg[0] === '$news'){
@@ -49,12 +49,11 @@ function helpMenu (message) {
     const helpMessage = new Discord.MessageEmbed()
         .setColor('#00FF00')
         .setTitle('Hii There👋')
-        .setDescription('\n\n\nI am StockBot 🤖. \n Get To Know Every Activity in Stock Market Around The Globe with Easy Commands.')
+        .setDescription('\n\n\nI am StockBot 🤖. \n Get To Know Every Activity in Stock Market around the Globe with Easy Commands.')
         .setThumbnail('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWtRb8O3CD3WRfd6MaEEZASSOlj1FKHcUGFsfV9HXU459LT1n8tDPeAj9Wj_SLyBK7pm4&usqp=CAU')
         .addFields(
-            { name: '\n\n$price companySymbol \neg., $price AAPL', value: 'Current Price Info about Company Stock\n\n' },
-            { name: '\n\n$overview companySymbol \neg., $overview AAPL', value: 'Company Overview\n\n'},
-            { name: '\n\n!exchangeRate fromCryptoSymbol toCryptoSymbol\neg., !exchangeRate BTC ETH', value: 'Know the Exchange Rates from one Cryptocurrency to another\n\n'},
+            { name : '`$help`' , value : 'For Stock Market Commands'},
+            { name : '`!help`' , value : 'For Crypto Commands'},
         )
         .setTimestamp()
     message.reply(helpMessage);

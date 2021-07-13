@@ -14,11 +14,9 @@ function chartHandler(message, msg){
     else if(msg[2] === "D"){
         cryptoDailyChart(message,msg[1]);
     }
-    else if(msg[2] === "Y"){
-
-    }
-    else if(msg[2] === "H"){
-
+    else
+    {
+        message.reply("`Invalid Command`");
     }
 }
 
