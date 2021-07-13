@@ -61,6 +61,10 @@ async function cryptoMonthlyChart(message, companySymbol){
 
     var dict = await getMonthlyData(companySymbol);
     console.log(dict);
+    if(dict["dataset"][0] < dict["dataset"][dict["dataset"].length-1])
+        color = '#43FF33'
+    else
+        color = '#c45850'
     const myChart = new QuickChart();
     myChart
     .setConfig({
@@ -70,7 +74,7 @@ async function cryptoMonthlyChart(message, companySymbol){
             datasets: [
                 { 
                     data: dict["dataset"].reverse(),
-                    borderColor: "#c45850",
+                    borderColor: color,
                     label : 'closing price',
                     fill: false
                 }
@@ -153,6 +157,10 @@ async function cryptoDailyChart(message,companySymbol)
 {
     var dict = await getDailyData(companySymbol);
     console.log(dict);
+    if(dict["dataset"][0] < dict["dataset"][dict["dataset"].length-1])
+        color = '#43FF33'
+    else
+        color = '#c45850'
     const myChart = new QuickChart();
     myChart
     .setConfig({
@@ -162,7 +170,7 @@ async function cryptoDailyChart(message,companySymbol)
             datasets: [
                 { 
                     data: dict["dataset"].reverse(),
-                    borderColor: "#c45850",
+                    borderColor: color,
                     label : 'closing price',
                     fill: false
                 }
