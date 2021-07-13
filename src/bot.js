@@ -46,6 +46,7 @@ client.on('message', (message) => {
             .setColor('#00FF00')
             .setTitle('Stock Market Commands')
             .setThumbnail('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWtRb8O3CD3WRfd6MaEEZASSOlj1FKHcUGFsfV9HXU459LT1n8tDPeAj9Wj_SLyBK7pm4&usqp=CAU')
+            .setDescription('`NOTE - For Indian Stocks use "BSE:Symbol", Eg. BSE:TCS`')
             .addFields(
                 { name: '\n\nPrice', value: '`eg.$price AAPL`' , inline: true},
                 { name: '\u200B', value: '\u200B', inline: true },
