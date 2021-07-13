@@ -67,6 +67,11 @@ async function companyMonthlyChart(message, companySymbol){
 
     var dict = await getMonthlyData(companySymbol);
     console.log(dict);
+    var color;
+    if(dict["dataset"][0] < dict["dataset"][dict["dataset"].length-1])
+        color = '#43FF33'
+    else
+        color = '#c45850'
     const myChart = new QuickChart();
     myChart
     .setConfig({
@@ -76,7 +81,7 @@ async function companyMonthlyChart(message, companySymbol){
             datasets: [
                 { 
                     data: dict["dataset"],
-                    borderColor: "#c45850",
+                    borderColor: color,
                     label : 'closing price',
                     fill: false
                 }
@@ -115,7 +120,7 @@ async function companyMonthlyChart(message, companySymbol){
     .setHeight(600)
 
     const chartMessage = new Discord.MessageEmbed()
-        .setColor('#00FF00')
+        .setColor('#0099ff')
         .setTitle(companySymbol + " (Stock Price - Last 30 days)")
         .setImage(myChart.getUrl())
         .setTimestamp()
@@ -169,6 +174,11 @@ async function getIntradayData(companySymbol){
 async function companyIntradayChart(message, companySymbol){
     var dict = await getIntradayData(companySymbol);
     console.log(dict);
+    var color;
+    if(dict["dataset"][0] < dict["dataset"][dict["dataset"].length-1])
+        color = '#43FF33'
+    else
+        color = '#c45850'
     const myChart = new QuickChart();
     myChart
     .setConfig({
@@ -178,7 +188,7 @@ async function companyIntradayChart(message, companySymbol){
             datasets: [
                 { 
                     data: dict["dataset"],
-                    borderColor: "#c45850",
+                    borderColor: color,
                     label : 'closing price',
                     fill: false
                 }
@@ -217,7 +227,7 @@ async function companyIntradayChart(message, companySymbol){
     .setHeight(600)
 
     const chartMessage = new Discord.MessageEmbed()
-        .setColor('#00FF00')
+        .setColor('#0099ff')
         .setTitle(companySymbol + " (Stock Price - " + dict["metadata"][0] + ")")
         .setImage(myChart.getUrl())
         .setTimestamp()
