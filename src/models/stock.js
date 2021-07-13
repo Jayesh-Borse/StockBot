@@ -103,12 +103,12 @@ function companyEODOverview(url, message, msg){
         responseType: json,
       })
        .then((res) => {
-          var date = res.data['Meta Data']['3. Last Refreshed'];
+          //var date = res.data['Meta Data']['3. Last Refreshed'];
           var company = msg[1];
           const botMessage = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle(company)
-            .setDescription('Last Refreshed : ' + date)
+            //.setDescription('Last Refreshed : ' + date)
             .addFields(
                 { name: 'Open', value: res.data['Time Series (Daily)'][date]['1. open'], inline: true},
                 { name: 'Close', value: res.data['Time Series (Daily)'][date]['4. close'], inline: true },
